@@ -1,60 +1,34 @@
 package com.example.doctormanagement.model;
 
-import java.io.Serializable;
-import java.util.List;
-
-public class Doctor implements Serializable {
-    private String id;
+public class Doctor {
+    private Long id;
     private String name;
     private String specialization;
-    private List<String> timeSlots;
+    private String timeSlots;
 
-
+    // Default constructor
     public Doctor() {}
 
-
-    public Doctor(String id, String name, String specialization, List<String> timeSlots) {
+    // Parameterized constructor
+    public Doctor(Long id, String name, String specialization, String timeSlots) {
         this.id = id;
         this.name = name;
         this.specialization = specialization;
         this.timeSlots = timeSlots;
     }
 
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSpecialization() {
-        return specialization;
-    }
-
-    public void setSpecialization(String specialization) {
-        this.specialization = specialization;
-    }
-
-    public List<String> getTimeSlots() {
-        return timeSlots;
-    }
-
-    public void setTimeSlots(List<String> timeSlots) {
-        this.timeSlots = timeSlots;
-    }
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; } // Must accept Long
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getSpecialization() { return specialization; }
+    public void setSpecialization(String specialization) { this.specialization = specialization; }
+    public String getTimeSlots() { return timeSlots; }
+    public void setTimeSlots(String timeSlots) { this.timeSlots = timeSlots; }
 
     @Override
     public String toString() {
-        return id + "," + name + "," + specialization + "," + String.join(";", timeSlots);
+        return "Doctor{id=" + id + ", name='" + name + "', specialization='" + specialization + "', timeSlots='" + timeSlots + "'}";
     }
 }

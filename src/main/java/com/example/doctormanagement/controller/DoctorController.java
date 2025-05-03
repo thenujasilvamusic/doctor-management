@@ -5,7 +5,12 @@ import com.example.doctormanagement.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,9 +19,19 @@ import java.util.List;
 @RequestMapping("/doctors")
 public class DoctorController {
 
-    @Autowired
-    private DoctorService doctorService;
+    private final DoctorService doctorService;
 
+    @Autowired
+    public DoctorController(DoctorService doctorService) {
+        this.doctorService = doctorService;
+    }
+
+    @GetMapping("/list")
+    public String showDoctorList(Model model) {
+        List<Doctor> doctors = doctorService.getAllDoctors();
+        model.addAttribute("doctors", doctors);
+        return "list";
+    }
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -24,65 +39,23 @@ public class DoctorController {
         return "register";
     }
 
-
     @PostMapping("/register")
-    public String registerDoctor(
-            @RequestParam String name,
-            @RequestParam String specialization,
-            @RequestParam String timeSlots,
-            Model model) {
-        List<String> slots = Arrays.asList(timeSlots.split(","));
-        Doctor doctor = doctorService.registerDoctor(name, specialization, slots);
-        model.addAttribute("doctorId", doctor.getId());
-        return "redirect:/doctors/dashboard/" + doctor.getId();
+    public String registerDoctor(@ModelAttribute("doctor") Doctor doctor,
+                                 @RequestParam("timeSlots") String timeSlotsStr) {
+        List<String> timeSlots = Arrays.asList(timeSlotsStr.split(";"));
+        doctorService.registerDoctor(doctor.getName(), doctor.getSpecialization(), timeSlots);
+        return "redirect:/doctors/list";
     }
-
-
-    @GetMapping("/list")
-    public String listDoctors(Model model) {
-        List<Doctor> doctors = doctorService.getAllDoctors();
-        model.addAttribute("doctors", doctors);
-        return "list";
-    }
-
 
     @GetMapping("/dashboard/{id}")
-    public String showDashboard(@PathVariable String id, Model model) {
+    public String showDashboard(@PathVariable("id") Long id, Model model) {
         Doctor doctor = doctorService.findDoctorById(id);
-        if (doctor == null) {
-            return "redirect:/doctors/list";
-        }
         model.addAttribute("doctor", doctor);
         return "dashboard";
     }
 
-
-    @GetMapping("/update/{id}")
-    public String showUpdateForm(@PathVariable String id, Model model) {
-        Doctor doctor = doctorService.findDoctorById(id);
-        if (doctor == null) {
-            return "redirect:/doctors/list";
-        }
-        model.addAttribute("doctor", doctor);
-        return "update";
-    }
-
-
-    @PostMapping("/update/{id}")
-    public String updateDoctor(
-            @PathVariable String id,
-            @RequestParam String name,
-            @RequestParam String specialization,
-            @RequestParam String timeSlots,
-            Model model) {
-        List<String> slots = Arrays.asList(timeSlots.split(","));
-        doctorService.updateDoctor(id, name, specialization, slots);
-        return "redirect:/doctors/dashboard/" + id;
-    }
-
-
     @GetMapping("/delete/{id}")
-    public String deleteDoctor(@PathVariable String id) {
+    public String deleteDoctor(@PathVariable("id") Long id) {
         doctorService.deleteDoctor(id);
         return "redirect:/doctors/list";
     }

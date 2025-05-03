@@ -15,11 +15,11 @@
         }
         .header {
             background-color: #ffffff;
-            padding: 10px 0;
+            padding: 20px 0;
             text-align: center;
         }
         .logo {
-            max-width: 300px;
+            max-width: 400px;
             height: auto;
         }
         .container {
@@ -28,7 +28,7 @@
             border-radius: 10px;
             margin-top: 20px;
         }
-        .delete-btn {
+        .delete-btn, .edit-btn {
             margin-left: 10px;
         }
     </style>
@@ -57,6 +57,7 @@
                     <td>${doctor.timeSlots}</td>
                     <td>
                         <a href="/doctors/dashboard/${doctor.id}" class="btn btn-info btn-sm">View Dashboard</a>
+                        <a href="/doctors/edit/${doctor.id}" class="btn btn-warning btn-sm edit-btn">Edit</a>
                         <a href="/doctors/delete/${doctor.id}" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('Are you sure you want to delete ${doctor.name}?')">
                             <img src="/resources/images/delete-icon.png" alt="Delete" style="max-width: 20px; vertical-align: middle;"> Delete
                         </a>

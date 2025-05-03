@@ -59,4 +59,22 @@ public class DoctorController {
         doctorService.deleteDoctor(id);
         return "redirect:/doctors/list";
     }
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable("id") Long id, Model model) {
+        Doctor doctor = doctorService.findDoctorById(id);
+        if (doctor == null) {
+            return "redirect:/doctors/list";
+        }
+        model.addAttribute("doctor", doctor);
+        return "edit";
+    }
+
+    @PostMapping("/edit")
+    public String updateDoctor(@ModelAttribute("doctor") Doctor doctor,
+                               @RequestParam("timeSlots") String timeSlotsStr) {
+        List<String> timeSlots = Arrays.asList(timeSlotsStr.split(";"));
+        doctorService.updateDoctor(doctor.getId(), doctor.getName(), doctor.getSpecialization(), timeSlots);
+        return "redirect:/doctors/list";
+    }
 }

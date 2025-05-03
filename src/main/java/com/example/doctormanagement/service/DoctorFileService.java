@@ -67,13 +67,13 @@ public class DoctorFileService {
     public Long generateId() {
         List<Doctor> existingDoctors = readDoctors();
         long newId = System.currentTimeMillis();
-        // Find the next available ID
+        
         while (true) {
-            final long currentId = newId; // Effectively final for lambda
+            final long currentId = newId; 
             if (existingDoctors.stream().noneMatch(d -> d.getId().equals(currentId))) {
                 return currentId;
             }
-            newId++; // Increment outside lambda
+            newId++; 
         }
     }
 }
